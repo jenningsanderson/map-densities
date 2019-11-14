@@ -34,10 +34,10 @@ module.exports = function(data, tile, writeData, done) {
   turf.featureEach(pInP,function(f){
   	if (f.properties.count > 0){
   		f.properties['n_count'] = f.properties.count / (f.properties.area / 1000000)
-  		delete f.properties.area
-  		coords = turf.toMercator(f)
-  		// console.warn(coords.geometry.coordinates)
-  		writeData([coords[0],coords[1],f.properties.count, Math.round(f.properties.n_count,2)].join(",") + "\n")
+  		coords = turf.toMercator(turf.center(f)).geometry.coordinates
+  		coords.push(f.properties.count)
+  		coords.push(Math.round(f.properties.n_count))
+  		writeData(coords.join(",") + "\n")
     }
   })
 
